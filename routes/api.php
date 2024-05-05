@@ -23,3 +23,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum') ;
 
 
+Route::namespace('Financeiro')->group(function () {
+    Route::resource('contas', 'ContaBancariaController');
+    Route::resource('despesas', 'DespesasController');
+    Route::resource('transacoes', 'TransacoesController');
+  
+})->middleware('auth:sanctum');
