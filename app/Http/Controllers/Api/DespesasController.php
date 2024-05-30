@@ -87,7 +87,16 @@ class DespesasController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->validate([
+            'titulo' => 'required|string|max:255',
+            'descricao' => 'required|string|max:255',
+            'categoria' => 'required|string|max:255',
+            'valor' => 'required|numeric',
+            'data_vencimento' => 'required|date|max:255',
+            'status' => 'required|string|in:pago,pendente,atrasado',
+        ]);
+
+
     }
 
     /**
