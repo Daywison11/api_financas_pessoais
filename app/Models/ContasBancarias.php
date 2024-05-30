@@ -22,4 +22,17 @@ class ContasBancarias extends Model
     {
         return $this->hasMany(Transacao::class);
     }
+
+    /**
+     * Escopo para filtrar por código de usuário.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $codigo_usuario
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+
+    public function scopeCodigoUsuario($query, $codigo_usuario)
+    {
+        return $query->where('user_id', $codigo_usuario);
+    }
 }
