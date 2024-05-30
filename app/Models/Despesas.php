@@ -15,4 +15,9 @@ class Despesas extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeCodigoUsuario($query, $codigo_usuario)
+    {
+        return $query->where('user_id', $codigo_usuario);
+    }
 }

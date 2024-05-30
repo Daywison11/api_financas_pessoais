@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\ContaBancariaController;
+use App\Http\Controllers\Api\DespesasController;
 use TheSeer\Tokenizer\NamespaceUri;
 
 
@@ -13,6 +14,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('contas', ContaBancariaController::class);
+    Route::resource('despesas', DespesasController::class);
 });
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -29,6 +31,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 // Route::resource('contas', 'ContaBancariaController');
 
 // Route::middleware('auth:sanctum')->group(function () {
-//     Route::resource('despesas', 'DespesasController');
+
 //     Route::resource('transacoes', 'TransacoesController');
 // });

@@ -96,7 +96,7 @@ class ContaBancariaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        
+
 
         $user_id = $request->user()->id;
         $data = $request->all();
