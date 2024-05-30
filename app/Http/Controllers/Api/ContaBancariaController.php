@@ -45,11 +45,14 @@ class ContaBancariaController extends Controller
     {
         $user_id = $request->user()->id;
         $data = $request->all();
-        
+        $data['user_id'] = $user_id;
 
         $existe = ContasBancarias::CodigoUsuario($user_id)->where('numero_conta', $data['numero_conta'])->exists();
-         
+        
+        // var_dump($data['numero_conta']);exit;
+
         if($existe){
+
             return response()->json(['mensagem' => 'Número da conta já cadastrado'], 409);
         }
 
@@ -57,7 +60,9 @@ class ContaBancariaController extends Controller
             $data['saldo'] = 0.00;
         }
         
-        return response()->json(['mensagem' => 'Conta cadastrada com sucesso!','dados'=> $data]);
+        $dados = ContasBancarias::create($data);
+
+        return response()->json(['mensagem' => 'Conta cadastrada com sucesso!','conta'=> $dados]);
         
     }
 
@@ -96,10 +101,10 @@ class ContaBancariaController extends Controller
                 $data['saldo'] = 0.00;
             }
 
-            $conta->update($data);
+            $dados = $conta->update($data);
             
             
-            return response()->json(['mensagem' => 'Conta atualizada com sucesso!','dados'=>$data]);
+            return response()->json(['mensagem' => 'Conta atualizada com sucesso!','conta'=>$dados]);
 
         }
         else{
@@ -111,8 +116,25 @@ class ContaBancariaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        //
+        
+        $user_id = $request->user()->id;
+        $data = $request->all();
+        $data['user_id'] = $user_id;
+       
+       
+        $conta = ContasBancarias::CodigoUsuario($user_id)->find($id);
+                
+        if ($conta){
+            
+            $dados = $conta->delete($conta);
+            
+            return response()->json(['mensagem' => 'Conta deletada com sucesso!','conta'=> $conta]);
+
+        }
+        else{
+            return response()->json(['mensagem' => 'Conta não encontrada'], 404);
+        }
     }
 }
