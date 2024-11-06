@@ -21,10 +21,8 @@ class DespesasController extends Controller
      */
     public function index(Request $request)
     {
-        $user_id = $request->user()->id;
-
         // Buscando  e retornando todas as despesas do usuário autenticado
-        $despesas = Despesas::CodigoUsuario($user_id)->get();
+        $despesas = Despesas::get();
         
         return response()->json($despesas);
     }
@@ -50,13 +48,7 @@ class DespesasController extends Controller
             'data_vencimento' => 'required|date|max:255',
             'status' => 'required|string|in:pago,pendente,atrasado',
         ]);
-
-
-        $user_id = $request->user()->id;
-        $data = $request->all();
-        $data['user_id'] = $user_id;
-
-       
+               
         if (!isset($data['valor']) && empty($data['valor'])) {
             $data['valor'] = 0.00;
         }

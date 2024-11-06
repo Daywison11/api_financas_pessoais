@@ -2,16 +2,27 @@
 
 namespace App\Models;
 
+use App\Models\Escopos\UserEscopo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ContasBancarias extends Model
 {
     use HasFactory;
+    protected $table = 'contas_bancarias';
+    protected $primaryKey = 'id';
+    protected $guarded = [];
 
-    // protected $table = 'contas_bancarias';
 
-    protected $fillable = ['user_id', 'tipo_conta', 'banco', 'numero_conta', 'saldo'];
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new UserEscopo);
+        static::creating(function ($despesas) {
+            $user_id = auth()->user() ? auth()->user()->id : app('user_id');
+            $despesas->user_id = $user_id;
+        });
+        
+    }
 
     public function usuario()
     {
@@ -31,8 +42,4 @@ class ContasBancarias extends Model
      * @return \Illuminate\Database\Eloquent\Builder
      */
 
-    public function scopeCodigoUsuario($query, $codigo_usuario)
-    {
-        return $query->where('user_id', $codigo_usuario);
-    }
 }

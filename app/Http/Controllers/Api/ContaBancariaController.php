@@ -21,15 +21,13 @@ class ContaBancariaController extends Controller
 
     public function index(Request $request)
     {
-        $user_id = $request->user()->id;
 
         // Buscando todas as contas bancárias do usuário autenticado
-        $contas = ContasBancarias::CodigoUsuario($user_id)->get();
+        $contas = ContasBancarias::get();
 
         // Retornando as contas bancárias como resposta JSON
         return response()->json($contas);
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -52,11 +50,11 @@ class ContaBancariaController extends Controller
         ]);
 
 
-        $user_id = $request->user()->id;
-        $data = $request->all();
-        $data['user_id'] = $user_id;
+        // $user_id = $request->user()->id;
+        // $data = $request->all();
+        // $data['user_id'] = $user_id;
 
-        $existe = ContasBancarias::CodigoUsuario($user_id)->where('numero_conta', $data['numero_conta'])->exists();
+        $existe = ContasBancarias::where('numero_conta', $data['numero_conta'])->exists();
 
 
         // var_dump($data['numero_conta']);exit;
@@ -100,17 +98,16 @@ class ContaBancariaController extends Controller
 
         $user_id = $request->user()->id;
         $data = $request->all();
-        $data['user_id'] = $user_id;
+        
 
 
-        $conta = ContasBancarias::CodigoUsuario($user_id)->find($id);
+        $conta = ContasBancarias::find($id);
 
 
         if ($conta) {
 
             // Verificar se o número da conta já existe para o usuário, excluindo o ID atual
-            $existe = ContasBancarias::codigoUsuario($user_id)
-                ->where('numero_conta', $data['numero_conta'])
+            $existe = ContasBancarias::where('numero_conta', $data['numero_conta'])
                 ->where('id', '!=', $id)
                 ->exists();
 
@@ -137,12 +134,12 @@ class ContaBancariaController extends Controller
     public function destroy(Request $request, string $id)
     {
 
-        $user_id = $request->user()->id;
-        $data = $request->all();
-        $data['user_id'] = $user_id;
+        // $user_id = $request->user()->id;
+        // $data = $request->all();
+        // $data['user_id'] = $user_id;
 
 
-        $conta = ContasBancarias::CodigoUsuario($user_id)->find($id);
+        $conta = ContasBancarias::find($id);
 
         if ($conta) {
 
