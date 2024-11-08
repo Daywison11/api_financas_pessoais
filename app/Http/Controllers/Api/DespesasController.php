@@ -23,7 +23,7 @@ class DespesasController extends Controller
     {
         // Buscando  e retornando todas as despesas do usuário autenticado
         $despesas = Despesas::get();
-        
+
         return response()->json($despesas);
     }
 
@@ -45,10 +45,10 @@ class DespesasController extends Controller
             'descricao' => 'required|string|max:255',
             'categoria' => 'required|string|max:255',
             'valor' => 'required|numeric',
-            'data_vencimento' => 'required|date|max:255',
+            'data_vencimento' => ['required', 'regex:/\d{2}\/\d{2}\/\d{4}/'],
             'status' => 'required|string|in:pago,pendente,atrasado',
         ]);
-               
+
         if (!isset($data['valor']) && empty($data['valor'])) {
             $data['valor'] = 0.00;
         }
@@ -84,11 +84,21 @@ class DespesasController extends Controller
             'descricao' => 'required|string|max:255',
             'categoria' => 'required|string|max:255',
             'valor' => 'required|numeric',
-            'data_vencimento' => 'required|date|max:255',
+            'data_vencimento' => ['required', 'regex:/\d{2}\/\d{2}\/\d{4}/'],
             'status' => 'required|string|in:pago,pendente,atrasado',
         ]);
 
+        $despesa = Despesas::find($id);
 
+
+        if ($despesa) {
+            
+            $despesa->update($data);
+
+            return response()->json(['mensagem' => 'Despesa atualizada com sucesso!', 'despesa' => $despesa]);
+        } else {
+            return response()->json(['mensagem' => 'Conta não encontrada'], 404);
+        }
     }
 
     /**

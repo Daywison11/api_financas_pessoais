@@ -6,6 +6,7 @@ use App\Models\Escopos\UserEscopo;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Despesas extends Model
 {
@@ -16,7 +17,6 @@ class Despesas extends Model
     protected $guarded = [];
 
    
-
     protected static function booted(): void
     {
        
@@ -27,10 +27,18 @@ class Despesas extends Model
         });
         
     }
+    public function getDataVencimentoAttribute($value)
+    {
+        return Carbon::parse($value)->format('d/m/Y');
+    }
+
+    public function setDataVencimentoAttribute($value)
+    {
+        $this->attributes['data_vencimento'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
+    }
 
     public function usuario()
     {
         return $this->belongsTo(User::class);
     }
-
 }
